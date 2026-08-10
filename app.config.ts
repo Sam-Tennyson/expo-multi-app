@@ -8,6 +8,8 @@ const APP_VARIANT = process.env.APP_VARIANT ?? "red";
 const apps = {
   red: redConfig,
   blue: blueConfig,
+
+  // more apps here
 };
 
 const app = apps[APP_VARIANT as keyof typeof apps];
@@ -31,6 +33,14 @@ const config: ExpoConfig = {
   android: {
     package: app.android.package,
     versionCode: app.android.versionCode,
+  },
+
+  runtimeVersion: {
+    policy: "appVersion",
+  },
+
+  updates: {
+    url: app.updates.url,
   },
 
   extra: {

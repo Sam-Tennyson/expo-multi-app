@@ -7,7 +7,11 @@ export const blueConfig = {
 
   version: "2.0.0",
 
-  projectId: undefined,
+  projectId: "bf7da3ec-5477-4d58-9998-626e33fe0861",
+
+  updates: {
+    url: "https://u.expo.dev/bf7da3ec-5477-4d58-9998-626e33fe0861",
+  },
 
   android: {
     package: "com.wecredit.multiapp.blue",

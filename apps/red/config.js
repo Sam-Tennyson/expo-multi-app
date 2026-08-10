@@ -8,6 +8,9 @@ export const redConfig = {
   version: "1.0.0",
 
   projectId: "443ae17e-057f-4918-9515-25ebb4d120de",
+  updates: {
+    url: "https://u.expo.dev/443ae17e-057f-4918-9515-25ebb4d120de",
+  },
   android: {
     package: "com.wecredit.multiapp.red",
     versionCode: 1,

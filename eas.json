@@ -1,21 +1,39 @@
 {
   "cli": {
-    "version": ">= 21.5.0",
-    "appVersionSource": "remote"
+    "appVersionSource": "local"
   },
   "build": {
-    "development": {
+    "red-development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "channel": "red-development",
+      "env": {
+        "APP_VARIANT": "red",
+        "EXPO_PUBLIC_APP_ENV": "development"
+      }
     },
-    "preview": {
-      "distribution": "internal"
+    "red-production": {
+      "channel": "red-production",
+      "env": {
+        "APP_VARIANT": "red",
+        "EXPO_PUBLIC_APP_ENV": "production"
+      }
     },
-    "production": {
-      "autoIncrement": true
+    "blue-development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "blue-development",
+      "env": {
+        "APP_VARIANT": "blue",
+        "EXPO_PUBLIC_APP_ENV": "development"
+      }
+    },
+    "blue-production": {
+      "channel": "blue-production",
+      "env": {
+        "APP_VARIANT": "blue",
+        "EXPO_PUBLIC_APP_ENV": "production"
+      }
     }
-  },
-  "submit": {
-    "production": {}
   }
 }
