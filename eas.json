@@ -1,39 +1,144 @@
 {
   "cli": {
-    "appVersionSource": "local"
+    "version": ">= 16.28.0",
+    "appVersionSource": "remote"
   },
   "build": {
-    "red-development": {
+    "red-simulator": {
       "developmentClient": true,
       "distribution": "internal",
       "channel": "red-development",
+      "environment": "development",
+      "ios": {
+        "simulator": true
+      },
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
       "env": {
         "APP_VARIANT": "red",
         "EXPO_PUBLIC_APP_ENV": "development"
       }
     },
+    "red-local": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "red-development",
+      "environment": "development",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "env": {
+        "APP_VARIANT": "red",
+        "EXPO_PUBLIC_APP_ENV": "development"
+      }
+    },
+    "red-preview": {
+      "autoIncrement": true,
+      "distribution": "internal",
+      "channel": "red-preview",
+      "environment": "preview",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "buildConfiguration": "Release"
+      },
+      "env": {
+        "APP_VARIANT": "red",
+        "EXPO_PUBLIC_APP_ENV": "development"
+      }
+    },
+    "red-testflight": {
+      "extends": "red-preview",
+      "distribution": "store"
+    },
     "red-production": {
+      "autoIncrement": true,
+      "distribution": "store",
       "channel": "red-production",
+      "environment": "production",
+      "android": {
+        "buildType": "app-bundle",
+        "image": "latest"
+      },
+      "ios": {
+        "buildConfiguration": "Release"
+      },
       "env": {
         "APP_VARIANT": "red",
         "EXPO_PUBLIC_APP_ENV": "production"
       }
     },
-    "blue-development": {
+    "blue-simulator": {
       "developmentClient": true,
       "distribution": "internal",
       "channel": "blue-development",
+      "environment": "development",
+      "ios": {
+        "simulator": true
+      },
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
       "env": {
         "APP_VARIANT": "blue",
         "EXPO_PUBLIC_APP_ENV": "development"
       }
     },
+    "blue-local": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "blue-development",
+      "environment": "development",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "env": {
+        "APP_VARIANT": "blue",
+        "EXPO_PUBLIC_APP_ENV": "development"
+      }
+    },
+    "blue-preview": {
+      "autoIncrement": true,
+      "distribution": "internal",
+      "channel": "blue-preview",
+      "environment": "preview",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "buildConfiguration": "Release"
+      },
+      "env": {
+        "APP_VARIANT": "blue",
+        "EXPO_PUBLIC_APP_ENV": "development"
+      }
+    },
+    "blue-testflight": {
+      "extends": "blue-preview",
+      "distribution": "store"
+    },
     "blue-production": {
+      "autoIncrement": true,
+      "distribution": "store",
       "channel": "blue-production",
+      "environment": "production",
+      "android": {
+        "buildType": "app-bundle",
+        "image": "latest"
+      },
+      "ios": {
+        "buildConfiguration": "Release"
+      },
       "env": {
         "APP_VARIANT": "blue",
         "EXPO_PUBLIC_APP_ENV": "production"
       }
     }
+  },
+  "submit": {
+    "red-production": {},
+    "blue-production": {}
   }
 }

@@ -10,14 +10,16 @@ type AppThemeExtra = {
   readonly primaryColor?: string;
 };
 
-type AppOtaExtra = {
-  readonly development?: number;
-  readonly production?: number;
-};
-
 type AppExtra = {
   readonly appVariant?: string;
-  readonly ota?: AppOtaExtra;
+  readonly appEnvironment?: string;
+  readonly isDevelopment?: boolean;
+  readonly otaUpdateNumber?: string;
+  readonly otaUpdateNumberDev?: string;
+  readonly otaUpdateNumberProd?: string;
+  readonly versionDev?: string;
+  readonly versionProd?: string;
+  readonly versionProdIos?: string;
   readonly theme?: AppThemeExtra;
   readonly eas?: {
     readonly projectId?: string;
@@ -30,10 +32,12 @@ type AppInfoRow = {
   readonly scheme: string;
   readonly version: string;
   readonly appVariant: string;
+  readonly appEnvironment: string;
   readonly bundleId: string;
   readonly buildNumber: string;
   readonly primaryColor: string;
   readonly projectId: string;
+  readonly otaUpdateNumber: string;
   readonly otaDevelopment: string;
   readonly otaProduction: string;
 };
@@ -63,14 +67,19 @@ function getAppInfo(): AppInfoRow | null {
     name: expoConfig.name ?? '—',
     slug: expoConfig.slug ?? '—',
     scheme: String(expoConfig.scheme ?? '—'),
-    version: expoConfig.version ?? '—',
+    version:
+      Platform.OS === 'ios'
+        ? (expoConfig.ios?.version ?? expoConfig.version ?? '—')
+        : (expoConfig.version ?? '—'),
     appVariant: extra.appVariant ?? '—',
+    appEnvironment: extra.appEnvironment ?? '—',
     bundleId,
     buildNumber,
     primaryColor: extra.theme?.primaryColor ?? '—',
     projectId: extra.eas?.projectId ?? '—',
-    otaDevelopment: String(extra.ota?.development ?? '—'),
-    otaProduction: String(extra.ota?.production ?? '—'),
+    otaUpdateNumber: extra.otaUpdateNumber ?? '—',
+    otaDevelopment: extra.otaUpdateNumberDev ?? '—',
+    otaProduction: extra.otaUpdateNumberProd ?? '—',
   };
 }
 
@@ -93,11 +102,16 @@ export function AppInfo() {
         <ThemedText type="smallBold">{appInfo.name}</ThemedText>
       </View>
       <HintRow title="Variant" hint={<ThemedText type="code">{appInfo.appVariant}</ThemedText>} />
+      <HintRow title="Environment" hint={<ThemedText type="code">{appInfo.appEnvironment}</ThemedText>} />
       <HintRow title="Slug" hint={<ThemedText type="code">{appInfo.slug}</ThemedText>} />
       <HintRow title="Scheme" hint={<ThemedText type="code">{appInfo.scheme}</ThemedText>} />
       <HintRow title="Version" hint={<ThemedText type="code">{appInfo.version}</ThemedText>} />
       <HintRow title="Bundle ID" hint={<ThemedText type="code">{appInfo.bundleId}</ThemedText>} />
       <HintRow title="Build" hint={<ThemedText type="code">{appInfo.buildNumber}</ThemedText>} />
+      <HintRow
+        title="OTA active"
+        hint={<ThemedText type="code">{appInfo.otaUpdateNumber}</ThemedText>}
+      />
       <HintRow
         title="OTA (dev/prod)"
         hint={

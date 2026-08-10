@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "33574021151",
+    "project_id": "multiple-app-ab1d8",
+    "storage_bucket": "multiple-app-ab1d8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33574021151:android:d4fc71f8d69072beba0d2a",
+        "android_client_info": {
+          "package_name": "com.wecredit.multiapp.blue"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaSkU0fCEVGMMDyowtyHHB50ckiItr7cc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

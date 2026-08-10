@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "673293366736",
+    "project_id": "multiapp-red",
+    "storage_bucket": "multiapp-red.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673293366736:android:53fd5d2f3d6c7f275d75d5",
+        "android_client_info": {
+          "package_name": "com.wecredit.multiapp.red"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBs7kXaviokidpo0YEt9AA1DASU_zjtGmo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

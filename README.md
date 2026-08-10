@@ -1,56 +1,97 @@
-# Welcome to your Expo app 👋
+# Expo multi-app POC
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+One Expo SDK 57 codebase produces two independently installable Todo apps. UI and application logic
+are shared; identity, theme, EAS project, update URL, channel, and Firebase client configuration are
+selected with `APP_VARIANT`.
 
-## Get started
+| Variant | Android / iOS ID | Development | Preview | Production |
+| --- | --- | --- | --- | --- |
+| Red | `com.wecredit.multiapp.red` | `red-development` | `red-preview` | `red-production` |
+| Blue | `com.wecredit.multiapp.blue` | `blue-development` | `blue-preview` | `blue-production` |
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Run locally
 
 ```bash
-npm run reset-project
+npm install
+npm run start:red
+npm run start:blue
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Remote notifications and EAS Update require an installed development or release build. They are not
+testable in Expo Go. Use one of the variant-specific build scripts in `package.json`.
 
-### Other setup steps
+## Build profiles
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Each app exposes the same promotion path without sharing OTA channels:
 
-## Learn more
+- `build:<variant>:simulator`: iOS Simulator or Android debug development client from EAS.
+- `build:<variant>:local`: local development-client build (`eas build --local`).
+- `build:<variant>:preview`: internally distributed release build on the preview channel.
+- `build:<variant>:testflight`: iOS store build that remains on the preview channel.
+- `build:<variant>:production`: Android App Bundle or iOS release build on production.
 
-To learn more about developing your project with Expo, look at the following resources:
+Platform-explicit shortcuts mirror the usual release commands:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm run build:red:local:android
+npm run build:red:simulator:ios
+npm run build:red:preview:android
+npm run build:red:testflight:ios
+```
 
-## Join the community
+Replace `red` with `blue` for the Blue app. Android local-development and preview shortcuts clear
+the remote EAS build cache. Despite the profile name, `build:<variant>:local:android` is an EAS cloud
+build, matching the supplied command pattern; `build:<variant>:local` is the actual `--local` build.
 
-Join our community of developers creating universal apps.
+Simulator and local builds intentionally share the variant's development channel. A local profile
+describes the binary; it does not need a separate update stream. Preview/TestFlight builds share a
+release-mode channel so an OTA can be tested before publishing the corresponding bundle to
+production.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Values used by application code should be configured in the EAS `development`, `preview`, and
+`production` environments. Do not place secrets under an `EXPO_PUBLIC_` name: those values are
+compiled into the client bundle and are readable by users.
+
+Each variant keeps its editable release metadata as flat fields in `apps/<variant>/config.js`:
+
+```js
+otaUpdateNumberDev: "1",
+otaUpdateNumberProd: "1",
+versionDev: "1.0.0",
+versionProd: "1.0.0",
+versionProdIos: "1.0.0",
+isDevelopment: false,
+```
+
+`isDevelopment` is the fallback when no environment is supplied. Build, update, and start scripts
+set `EXPO_PUBLIC_APP_ENV`, which safely overrides the fallback: development and preview profiles use
+the development values, while production uses the production values. `versionProdIos` allows the
+iOS production marketing version to differ intentionally. The OTA number is an app-visible release
+label; EAS runtime version and update ID remain the source of truth for OTA compatibility.
+
+## Firebase / FCM setup
+
+1. Register `com.wecredit.multiapp.red` and `com.wecredit.multiapp.blue` as separate Android apps in
+   Firebase (they may belong to the same Firebase project).
+2. Put each downloaded client file at `apps/<variant>/google-services.json`. The dynamic app config
+   only includes the file when it exists.
+3. Upload an FCM V1 service-account credential to each matching EAS project with `eas credentials`.
+   Do not commit the service-account private key.
+4. Configure APNs credentials in EAS for both iOS bundle identifiers.
+
+The Diagnostics tab shows whether the active variant's Firebase client file was detected and lets
+you create an Expo push token or schedule a local notification.
+
+## OTA test
+
+Create and install both preview builds, make a visible JavaScript-only change, then publish it to
+exactly one app:
+
+```bash
+npm run update:red:preview -- --message "Red-only OTA test"
+```
+
+Use the Diagnostics tab in both installed apps to check/download the update. Only Red should receive
+it. Repeat with `update:blue:preview` to verify the inverse. Once verified, publish or republish the
+same commit to the variant's production channel. Changes to native dependencies or
+app config require a new build and an incremented app version/runtime; they cannot be shipped OTA.
