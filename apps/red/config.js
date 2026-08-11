@@ -5,7 +5,7 @@ export const redConfig = {
   slug: "multiapp-red",
   scheme: "multiappred",
 
-  otaUpdateNumberDev: "1",
+  otaUpdateNumberDev: "2",
   otaUpdateNumberProd: "1",
   versionDev: "1.0.0",
   versionProd: "1.0.0",

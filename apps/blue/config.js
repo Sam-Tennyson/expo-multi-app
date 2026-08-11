@@ -5,7 +5,7 @@ export const blueConfig = {
   slug: "multiapp-blue",
   scheme: "multiappblue",
 
-  otaUpdateNumberDev: "2",
+  otaUpdateNumberDev: "3",
   otaUpdateNumberProd: "1",
   versionDev: "2.0.0",
   versionProd: "2.0.0",
