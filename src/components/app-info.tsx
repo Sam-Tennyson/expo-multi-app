@@ -1,87 +1,10 @@
-import Constants from 'expo-constants';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { HintRow } from '@/components/hint-row';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-
-type AppThemeExtra = {
-  readonly primaryColor?: string;
-};
-
-type AppExtra = {
-  readonly appVariant?: string;
-  readonly appEnvironment?: string;
-  readonly isDevelopment?: boolean;
-  readonly otaUpdateNumber?: string;
-  readonly otaUpdateNumberDev?: string;
-  readonly otaUpdateNumberProd?: string;
-  readonly versionDev?: string;
-  readonly versionProd?: string;
-  readonly versionProdIos?: string;
-  readonly theme?: AppThemeExtra;
-  readonly eas?: {
-    readonly projectId?: string;
-  };
-};
-
-type AppInfoRow = {
-  readonly name: string;
-  readonly slug: string;
-  readonly scheme: string;
-  readonly version: string;
-  readonly appVariant: string;
-  readonly appEnvironment: string;
-  readonly bundleId: string;
-  readonly buildNumber: string;
-  readonly primaryColor: string;
-  readonly projectId: string;
-  readonly otaUpdateNumber: string;
-  readonly otaDevelopment: string;
-  readonly otaProduction: string;
-};
-
-/**
- * Reads the active Expo app config and normalizes variant-specific fields.
- */
-function getAppInfo(): AppInfoRow | null {
-  const expoConfig = Constants.expoConfig;
-  if (!expoConfig) {
-    return null;
-  }
-  const extra = (expoConfig.extra ?? {}) as AppExtra;
-  const bundleId =
-    Platform.OS === 'ios'
-      ? (expoConfig.ios?.bundleIdentifier ?? '—')
-      : Platform.OS === 'android'
-        ? (expoConfig.android?.package ?? '—')
-        : (expoConfig.ios?.bundleIdentifier ?? expoConfig.android?.package ?? '—');
-  const buildNumber =
-    Platform.OS === 'ios'
-      ? (expoConfig.ios?.buildNumber ?? '—')
-      : Platform.OS === 'android'
-        ? String(expoConfig.android?.versionCode ?? '—')
-        : (expoConfig.ios?.buildNumber ?? String(expoConfig.android?.versionCode ?? '—'));
-  return {
-    name: expoConfig.name ?? '—',
-    slug: expoConfig.slug ?? '—',
-    scheme: String(expoConfig.scheme ?? '—'),
-    version:
-      Platform.OS === 'ios'
-        ? (expoConfig.ios?.version ?? expoConfig.version ?? '—')
-        : (expoConfig.version ?? '—'),
-    appVariant: extra.appVariant ?? '—',
-    appEnvironment: extra.appEnvironment ?? '—',
-    bundleId,
-    buildNumber,
-    primaryColor: extra.theme?.primaryColor ?? '—',
-    projectId: extra.eas?.projectId ?? '—',
-    otaUpdateNumber: extra.otaUpdateNumber ?? '—',
-    otaDevelopment: extra.otaUpdateNumberDev ?? '—',
-    otaProduction: extra.otaUpdateNumberProd ?? '—',
-  };
-}
+import { getAppInfo } from '@/core/app-config';
 
 /**
  * Displays the active multi-app variant configuration from Expo Constants.

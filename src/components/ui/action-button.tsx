@@ -1,16 +1,10 @@
-import Constants from 'expo-constants';
 import { Pressable, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
+import { getPrimaryColor } from '@/core/app-config';
 
 type ActionButtonVariant = 'primary' | 'secondary';
-
-type AppThemeExtra = {
-  readonly theme?: {
-    readonly primaryColor?: string;
-  };
-};
 
 type ActionButtonProps = {
   readonly label: string;
@@ -23,12 +17,6 @@ type ActionButtonProps = {
 };
 
 const DISABLED_OPACITY = 0.45;
-const FALLBACK_PRIMARY_COLOR = '#3c87f7';
-
-function getPrimaryColor(): string {
-  const extra = (Constants.expoConfig?.extra ?? {}) as AppThemeExtra;
-  return extra.theme?.primaryColor ?? FALLBACK_PRIMARY_COLOR;
-}
 
 /**
  * Shared action control. Variants pass label and shape; brand color comes from app config.

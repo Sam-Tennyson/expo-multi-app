@@ -1,12 +1,8 @@
-import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { useCallback, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
-
-type NotificationExtra = {
-  androidChannelId?: string;
-};
+import { getEasProjectId, getNotificationConfig } from '@/core/app-config';
 
 if (Platform.OS !== 'web') {
   Notifications.setNotificationHandler({
@@ -55,8 +51,8 @@ export function useNotifications() {
 
     try {
       if (Platform.OS === 'android') {
-        const extra = Constants.expoConfig?.extra?.notifications as NotificationExtra | undefined;
-        await Notifications.setNotificationChannelAsync(extra?.androidChannelId ?? 'todos', {
+        const notificationConfig = getNotificationConfig();
+        await Notifications.setNotificationChannelAsync(notificationConfig.androidChannelId ?? 'todos', {
           name: 'Todo reminders',
           importance: Notifications.AndroidImportance.HIGH,
         });
@@ -70,7 +66,7 @@ export function useNotifications() {
         return;
       }
 
-      const projectId = Constants.expoConfig?.extra?.eas?.projectId;
+      const projectId = getEasProjectId();
       if (!projectId) throw new Error('EAS project ID is missing from app config.');
       const token = await Notifications.getExpoPushTokenAsync({ projectId });
       setExpoPushToken(token.data);

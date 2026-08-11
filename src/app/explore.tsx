@@ -1,4 +1,3 @@
-import Constants from 'expo-constants';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,17 +6,13 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { UpdatesPanel } from '@/components/updates-panel';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { getNotificationConfig, getPrimaryColor } from '@/core/app-config';
 import { Login } from '@/features/login';
 import { useNotifications } from '@/hooks/use-notifications';
 
-type AppExtra = {
-  theme?: { primaryColor?: string };
-  notifications?: { firebaseConfigured?: boolean };
-};
-
 export default function DiagnosticsScreen() {
-  const extra = (Constants.expoConfig?.extra ?? {}) as AppExtra;
-  const primaryColor = extra.theme?.primaryColor ?? '#3c87f7';
+  const notificationsConfig = getNotificationConfig();
+  const primaryColor = getPrimaryColor();
   const { permission, expoPushToken, lastEvent, error, register, scheduleTodoReminder } =
     useNotifications();
 
@@ -46,7 +41,7 @@ export default function DiagnosticsScreen() {
             <ThemedText type="smallBold">Notifications</ThemedText>
             <ThemedText type="small">Permission: {permission}</ThemedText>
             <ThemedText type="small">
-              Firebase Android file: {extra.notifications?.firebaseConfigured ? 'detected' : 'not supplied'}
+              Firebase Android file: {notificationsConfig.firebaseConfigured ? 'detected' : 'not supplied'}
             </ThemedText>
             <ThemedText selectable type="code" style={styles.token}>
               {expoPushToken ?? 'Enable notifications to create an Expo push token.'}
