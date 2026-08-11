@@ -61,6 +61,7 @@ const config: ExpoConfig = {
         defaultChannel: app.notifications.androidChannelId,
       },
     ],
+    "expo-splash-screen",
   ],
 
   runtimeVersion: {

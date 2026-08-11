@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { UpdatesPanel } from '@/components/updates-panel';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { Login } from '@/features/login';
 import { useNotifications } from '@/hooks/use-notifications';
 
 type AppExtra = {
@@ -32,6 +33,14 @@ export default function DiagnosticsScreen() {
           </View>
 
           <AppInfo />
+
+          <ThemedView type="backgroundElement" style={styles.panel}>
+            <ThemedText type="smallBold">Variant component reference</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              Shared route, shared logic, app-specific presentation through a resolver.
+            </ThemedText>
+            <Login />
+          </ThemedView>
 
           <ThemedView type="backgroundElement" style={styles.panel}>
             <ThemedText type="smallBold">Notifications</ThemedText>
