@@ -17,7 +17,16 @@ type BlueLoginExtra = {
 };
 
 export function BlueLoginForm() {
-  const { email, password, submitState, hasSharedCredentials, setEmail, setPassword, submit } =
+  const {
+    email,
+    password,
+    submitState,
+    hasSharedCredentials,
+    errorMessage,
+    setEmail,
+    setPassword,
+    submit,
+  } =
     useLoginForm();
   const [workspaceId, setWorkspaceId] = useState('');
   const canSubmit = hasSharedCredentials && workspaceId.trim().length > 0;
@@ -72,6 +81,8 @@ export function BlueLoginForm() {
       <ThemedText type="small" themeColor="textSecondary">
         {submitState === 'success'
           ? 'Blue submit included workspace ID.'
+          : submitState === 'error'
+            ? (errorMessage ?? 'Invalid credentials.')
           : 'Workspace ID is required for Blue only.'}
       </ThemedText>
     </ThemedView>

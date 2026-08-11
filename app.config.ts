@@ -87,6 +87,7 @@ const config: ExpoConfig = {
       androidChannelId: app.notifications.androidChannelId,
       firebaseConfigured: hasGoogleServicesFile,
     },
+    auth: app.auth,
     eas: {
       projectId: app.projectId,
     },

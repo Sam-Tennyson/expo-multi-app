@@ -37,4 +37,14 @@ export const redConfig = {
     androidChannelId: "todos",
     googleServicesFile: "./apps/red/google-services.json",
   },
+
+  auth: {
+    protectedRoutes: [],
+    defaultProtectedRoute: "/",
+    credentials: {
+      email: "red@example.com",
+      password: "red123",
+      workspaceId: "red-team",
+    },
+  },
 };

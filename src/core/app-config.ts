@@ -1,7 +1,7 @@
-import Constants from 'expo-constants';
-import { Platform } from 'react-native';
+import Constants from "expo-constants";
+import { Platform } from "react-native";
 
-import { AppVariant, isAppVariant } from '@/core/app-variant';
+import { AppVariant, isAppVariant } from "@/core/app-variant";
 
 type AppTheme = {
   readonly primaryColor?: string;
@@ -10,6 +10,20 @@ type AppTheme = {
 type AppNotifications = {
   readonly androidChannelId?: string;
   readonly firebaseConfigured?: boolean;
+};
+
+type AuthRoute = "/" | "/explore" | "/profile";
+
+type AppCredentials = {
+  readonly email?: string;
+  readonly password?: string;
+  readonly workspaceId?: string;
+};
+
+type AppAuth = {
+  readonly protectedRoutes?: readonly AuthRoute[];
+  readonly defaultProtectedRoute?: AuthRoute;
+  readonly credentials?: AppCredentials;
 };
 
 type AppExtra = {
@@ -24,6 +38,7 @@ type AppExtra = {
   readonly versionProdIos?: string;
   readonly theme?: AppTheme;
   readonly notifications?: AppNotifications;
+  readonly auth?: AppAuth;
   readonly eas?: {
     readonly projectId?: string;
   };
@@ -43,13 +58,15 @@ export type AppInfo = {
   readonly otaUpdateNumber: string;
   readonly otaDevelopment: string;
   readonly otaProduction: string;
+  readonly auth: AppAuth;
 };
 
-const FALLBACK_APP_NAME = 'Todo POC';
-const FALLBACK_PRIMARY_COLOR = '#3c87f7';
+const FALLBACK_APP_NAME = "Todo POC";
+const FALLBACK_PRIMARY_COLOR = "#3c87f7";
 
 export function getExpoConfig() {
-  return Constants.expoConfig;
+  const expoConfig = Constants.expoConfig;
+  return expoConfig;
 }
 
 export function getAppExtra(): AppExtra {
@@ -69,8 +86,8 @@ export function getPrimaryColor(): string {
 }
 
 export function getAppVariantFromConfig(): AppVariant {
-  const value = getAppExtra().appVariant ?? '';
-  return isAppVariant(value) ? value : 'red';
+  const value = getAppExtra().appVariant ?? "";
+  return isAppVariant(value) ? value : "red";
 }
 
 export function getNotificationConfig(): AppNotifications {
@@ -81,6 +98,16 @@ export function getEasProjectId(): string | undefined {
   return getAppExtra().eas?.projectId;
 }
 
+export function getAuthConfig(): AppAuth {
+  const extra = getAppExtra();
+  return extra.auth ?? {};
+}
+
+export function getDefaultCredentials(): AppCredentials {
+  const authConfig = getAuthConfig();
+  return authConfig.credentials ?? {};
+}
+
 export function getAppInfo(): AppInfo | null {
   const expoConfig = getExpoConfig();
   if (!expoConfig) {
@@ -89,34 +116,38 @@ export function getAppInfo(): AppInfo | null {
 
   const extra = getAppExtra();
   const bundleId =
-    Platform.OS === 'ios'
-      ? (expoConfig.ios?.bundleIdentifier ?? '—')
-      : Platform.OS === 'android'
-        ? (expoConfig.android?.package ?? '—')
-        : (expoConfig.ios?.bundleIdentifier ?? expoConfig.android?.package ?? '—');
+    Platform.OS === "ios"
+      ? (expoConfig.ios?.bundleIdentifier ?? "—")
+      : Platform.OS === "android"
+        ? (expoConfig.android?.package ?? "—")
+        : (expoConfig.ios?.bundleIdentifier ??
+          expoConfig.android?.package ??
+          "—");
   const buildNumber =
-    Platform.OS === 'ios'
-      ? (expoConfig.ios?.buildNumber ?? '—')
-      : Platform.OS === 'android'
-        ? String(expoConfig.android?.versionCode ?? '—')
-        : (expoConfig.ios?.buildNumber ?? String(expoConfig.android?.versionCode ?? '—'));
+    Platform.OS === "ios"
+      ? (expoConfig.ios?.buildNumber ?? "—")
+      : Platform.OS === "android"
+        ? String(expoConfig.android?.versionCode ?? "—")
+        : (expoConfig.ios?.buildNumber ??
+          String(expoConfig.android?.versionCode ?? "—"));
 
   return {
-    name: expoConfig.name ?? '—',
-    slug: expoConfig.slug ?? '—',
-    scheme: String(expoConfig.scheme ?? '—'),
+    name: expoConfig.name ?? "—",
+    slug: expoConfig.slug ?? "—",
+    scheme: String(expoConfig.scheme ?? "—"),
     version:
-      Platform.OS === 'ios'
-        ? (expoConfig.ios?.version ?? expoConfig.version ?? '—')
-        : (expoConfig.version ?? '—'),
+      Platform.OS === "ios"
+        ? (expoConfig.ios?.version ?? expoConfig.version ?? "—")
+        : (expoConfig.version ?? "—"),
     appVariant: getAppVariantFromConfig(),
-    appEnvironment: extra.appEnvironment ?? '—',
+    appEnvironment: extra.appEnvironment ?? "—",
     bundleId,
     buildNumber,
-    primaryColor: extra.theme?.primaryColor ?? '—',
-    projectId: extra.eas?.projectId ?? '—',
-    otaUpdateNumber: extra.otaUpdateNumber ?? '—',
-    otaDevelopment: extra.otaUpdateNumberDev ?? '—',
-    otaProduction: extra.otaUpdateNumberProd ?? '—',
+    primaryColor: extra.theme?.primaryColor ?? "—",
+    projectId: extra.eas?.projectId ?? "—",
+    otaUpdateNumber: extra.otaUpdateNumber ?? "—",
+    otaDevelopment: extra.otaUpdateNumberDev ?? "—",
+    otaProduction: extra.otaUpdateNumberProd ?? "—",
+    auth: extra.auth ?? {},
   };
 }

@@ -1,4 +1,4 @@
-export type SubmitState = 'idle' | 'success';
+export type SubmitState = 'idle' | 'success' | 'error';
 
 export type SharedLoginFields = {
   readonly email: string;

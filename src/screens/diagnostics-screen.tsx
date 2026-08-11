@@ -10,7 +10,7 @@ import { getNotificationConfig, getPrimaryColor } from '@/core/app-config';
 import { Login } from '@/features/login';
 import { useNotifications } from '@/hooks/use-notifications';
 
-export default function DiagnosticsScreen() {
+export function DiagnosticsScreen() {
   const notificationsConfig = getNotificationConfig();
   const primaryColor = getPrimaryColor();
   const { permission, expoPushToken, lastEvent, error, register, scheduleTodoReminder } =
@@ -79,3 +79,4 @@ const styles = StyleSheet.create({
   lightText: { color: '#fff', fontWeight: '700' },
   error: { color: '#c62828' },
 });
+

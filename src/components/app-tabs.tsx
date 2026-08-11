@@ -1,14 +1,16 @@
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { useColorScheme } from 'react-native';
 
-import { appTabConfig } from '@/components/app-tab-config';
+import { appTabConfig, getVisibleTabs } from '@/components/app-tab-config';
 import { Colors } from '@/constants/theme';
+import { useAuth } from '@/core/auth';
 import { resolveVariant } from '@/core/variant';
 
 export default function AppTabs() {
   const scheme = useColorScheme();
   const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
-  const tabs = resolveVariant(appTabConfig);
+  const { isAuthenticated } = useAuth();
+  const tabs = getVisibleTabs(resolveVariant(appTabConfig), isAuthenticated);
 
   return (
     <NativeTabs

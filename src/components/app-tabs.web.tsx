@@ -13,12 +13,14 @@ import { ExternalLink } from './external-link';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
-import { appTabConfig } from '@/components/app-tab-config';
+import { appTabConfig, getVisibleTabs } from '@/components/app-tab-config';
 import { Colors, MaxContentWidth, Spacing } from '@/constants/theme';
+import { useAuth } from '@/core/auth';
 import { resolveVariant } from '@/core/variant';
 
 export default function AppTabs() {
-  const tabs = resolveVariant(appTabConfig);
+  const { isAuthenticated } = useAuth();
+  const tabs = getVisibleTabs(resolveVariant(appTabConfig), isAuthenticated);
 
   return (
     <Tabs>

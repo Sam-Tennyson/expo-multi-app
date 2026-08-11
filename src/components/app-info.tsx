@@ -1,3 +1,4 @@
+import * as Updates from 'expo-updates';
 import { StyleSheet, View } from 'react-native';
 
 import { HintRow } from '@/components/hint-row';
@@ -11,6 +12,10 @@ import { getAppInfo } from '@/core/app-config';
  */
 export function AppInfo() {
   const appInfo = getAppInfo();
+  const appliedUpdateAt = Updates.createdAt?.toISOString() ?? '—';
+  const appliedUpdateId = Updates.updateId ?? '—';
+  const launchSource = Updates.isEmbeddedLaunch ? 'embedded' : 'OTA';
+
   if (!appInfo) {
     return (
       <ThemedView type="backgroundElement" style={styles.container}>
@@ -32,17 +37,20 @@ export function AppInfo() {
       <HintRow title="Bundle ID" hint={<ThemedText type="code">{appInfo.bundleId}</ThemedText>} />
       <HintRow title="Build" hint={<ThemedText type="code">{appInfo.buildNumber}</ThemedText>} />
       <HintRow
-        title="OTA active"
+        title="Release label"
         hint={<ThemedText type="code">{appInfo.otaUpdateNumber}</ThemedText>}
       />
       <HintRow
-        title="OTA (dev/prod)"
+        title="Release labels"
         hint={
           <ThemedText type="code">
             {appInfo.otaDevelopment}/{appInfo.otaProduction}
           </ThemedText>
         }
       />
+      <HintRow title="Launch source" hint={<ThemedText type="code">{launchSource}</ThemedText>} />
+      <HintRow title="Applied update ID" hint={<ThemedText type="code">{appliedUpdateId}</ThemedText>} />
+      <HintRow title="Applied update time" hint={<ThemedText type="code">{appliedUpdateAt}</ThemedText>} />
       <HintRow title="Project ID" hint={<ThemedText type="code">{appInfo.projectId}</ThemedText>} />
     </ThemedView>
   );

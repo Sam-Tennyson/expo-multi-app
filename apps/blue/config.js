@@ -5,7 +5,7 @@ export const blueConfig = {
   slug: "multiapp-blue",
   scheme: "multiappblue",
 
-  otaUpdateNumberDev: "1",
+  otaUpdateNumberDev: "2",
   otaUpdateNumberProd: "1",
   versionDev: "2.0.0",
   versionProd: "2.0.0",
@@ -37,5 +37,15 @@ export const blueConfig = {
   notifications: {
     androidChannelId: "todos",
     googleServicesFile: "./apps/blue/google-services.json",
+  },
+
+  auth: {
+    protectedRoutes: ["/profile"],
+    defaultProtectedRoute: "/",
+    credentials: {
+      email: "blue@example.com",
+      password: "blue123",
+      workspaceId: "blue-team",
+    },
   },
 };

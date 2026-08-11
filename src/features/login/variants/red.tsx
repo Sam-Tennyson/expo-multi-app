@@ -9,7 +9,7 @@ import { Spacing } from '@/constants/theme';
 import { useLoginForm } from '../use-login-form';
 
 export function RedLoginForm() {
-  const { email, password, submitState, hasSharedCredentials, setEmail, setPassword, submit } =
+  const { email, password, submitState, hasSharedCredentials, errorMessage, setEmail, setPassword, submit } =
     useLoginForm();
   return (
     <ThemedView type="backgroundElement" style={styles.card}>
@@ -40,6 +40,8 @@ export function RedLoginForm() {
       <ThemedText type="small" themeColor="textSecondary">
         {submitState === 'success'
           ? 'Shared submit logic executed successfully.'
+          : submitState === 'error'
+            ? (errorMessage ?? 'Invalid credentials.')
           : 'Password must be at least 6 characters.'}
       </ThemedText>
     </ThemedView>

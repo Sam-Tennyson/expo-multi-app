@@ -7,6 +7,16 @@ export type AppTabItem = {
   icon: any;
 };
 
+/**
+ * Profile is a signed-in tab. Hide it until the session exists.
+ */
+export function getVisibleTabs(
+  tabs: readonly AppTabItem[],
+  isAuthenticated: boolean,
+): AppTabItem[] {
+  return tabs.filter((tab) => tab.name !== 'profile' || isAuthenticated);
+}
+
 export const appTabConfig: Record<AppVariant, AppTabItem[]> = {
   red: [
     {
